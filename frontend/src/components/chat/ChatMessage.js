@@ -1,13 +1,21 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import './ChatMessage.css'
 function ChatMessage(props) {
+    const [time, setTime] = useState()
+    useEffect(()=>{
+        var today = new Date(props.message.timeStamp);
+        today.setHours(today.getHours());
+        setTime(today.toString().slice(4, 24))
+    }, [])
+
     return <div >
-        {/* if it's the user that signed in make it green 
-        replace true with: message.name === user.name*/}
         <p className={`chat__message ${props.message.userId === props.currentUserId && 'chat__reciever'}`}>
             <span className="chat__name">{props.message.username}</span>
-            {props.message.content}
-            <span className="chat__timestamp">{props.message.timeStamp}</span>
+            <span ref={props.setRef}>{props.message.content}</span>
+            <br />
+            <span className="chat__timestamp">{
+            time}
+            </span>
         </p>
     </div>
 }

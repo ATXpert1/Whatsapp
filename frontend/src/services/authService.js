@@ -1,9 +1,10 @@
 import customAxios, { getToken } from '../configs/axios'
 import { disconnectSocket } from '../configs/socket'
 class AuthService {
-    signup = (username, email, password) => {
-        return customAxios.post('/auth/signup', { username, email, password }).then(
-        );
+    signup = (username, password) => {
+        return customAxios.post('/auth/signup', { username, password })
+        .then(resp=>resp.data)
+        .catch(err=>err)
     };
     login = (username, password) => {
         return customAxios.post('/auth/login', { username: username, password: password }).then(resp => {

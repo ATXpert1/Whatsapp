@@ -32,6 +32,8 @@ const ProtectedRoute = () => {
         if (groups.length) {
             connectSocket(groups.map(group => group._id))
             return <Outlet />
+        }else{
+            return <Outlet/>
         }
     }
     else {

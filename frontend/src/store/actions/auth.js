@@ -9,9 +9,11 @@ const login = (username, password) => (dispatch) => {
             dispatch({ type: 'LOGIN_FAIL' })
         })
 }
-const register = (username, email, password) => (dispatch) => {
-    return customAxios.post('/auth/signup', { username, email, password }).then(
-    );
+const signup = (username, password) => (dispatch) => {
+    return AuthService.signup(username, password).then(resp=>{
+        console.log(resp)
+        dispatch(login(username, password))
+    }).catch(err=>err)
 };
 const logout = () => (dispatch) => {
     AuthService.logout();
@@ -19,7 +21,7 @@ const logout = () => (dispatch) => {
 }
 const authActions = {
     login,
-    register,
+    signup,
     logout
 };
 export default authActions

@@ -8,23 +8,52 @@ const createGroup = (groupName, createdById) => {
             admins: [createdById],
             participants: [createdById],
         })
-        group.id = group._id;
-        delete group._id;
         group.save((err, group) => {
             if (err) {
                 reject(err)
             } else {
-                usersBL.addGroupToUser(createdById, group._id).then(resp => {
-                    resolve('group created')
+                usersBL.addGroupToUser(group._id, createdById).then(resp => {
+                    resolve(group)
                 }).catch(err => {
                     groupModel.findByIdAndDelete(group._id, (err, group) => {
                         if (err) {
                             reject(err)
                         } else {
-                            resolve('deleted group')
+                            resolve('deleted group, cannot add admin')
                         }
                     })
                 })
+            }
+        })
+    })
+}
+const addUserToGroup = (groupId, userId) => {
+    return new Promise((resolve, reject) => {
+        groupModel.findById(groupId, (err, group) => {
+            if (err) {
+                console.log('first error, groupsBL')
+                reject(err)
+            } else {
+                let resp = group?.participants.find((user) => user._id.toString() == userId)
+                if (resp) {
+                    console.log('duplicate, groupsBL')
+                    reject('duplicate group')
+                } else {
+                    group.participants.push(userId)
+                    group.save((err) => {
+                        if (err) {
+                            console.log('after save, groupsBL')
+                            reject(err)
+                        } else {
+                            usersBL.addGroupToUser(groupId, userId)
+                                .then(userResp => resolve(group))
+                                .catch(err => {
+                                    console.log('last minute, groupsBL')
+                                    reject(err)
+                                })
+                        } 
+                    })
+                }
             }
         })
     })
@@ -37,10 +66,10 @@ const addMessageToGroup = (groupId, message) => {
             username: message.username,
             userId: message.userId
         }
-        groupModel.findByIdAndUpdate(groupId, { $push: { messages: messageObj } }, {new: true})
-        .then(resp => resolve(resp.messages.at(-1)))
-        .catch(err => reject(err))
+        groupModel.findByIdAndUpdate(groupId, { $push: { messages: messageObj } }, { new: true })
+            .then(resp => resolve(resp.messages.at(-1)))
+            .catch(err => reject(err))
     })
 }
 
-module.exports = { createGroup, addMessageToGroup }
+module.exports = { createGroup, addMessageToGroup, addUserToGroup }

@@ -1,6 +1,7 @@
 const initialState = {
     groups: [],
-    groupToDisplay: ''
+    groupToDisplay: '',
+    createGroupStatus: null
 }
 function appReducer(state = initialState, action) {
     const { type, payload } = action;
@@ -12,8 +13,15 @@ function appReducer(state = initialState, action) {
         case 'SEND_MESSAGE':
             let groupIndex = state.groups.findIndex((group)=>group._id===payload.groupId)
             let newGroups = state.groups;
-            newGroups[groupIndex].messages = [...newGroups[groupIndex].messages, payload.message]
+            newGroups.unshift(newGroups[groupIndex]);
+            newGroups.splice(groupIndex+1, 1);
+            newGroups[0].messages = [...newGroups[0].messages, payload.message]
             return {...state, groups: newGroups}
+        case 'CREATE_GROUP_SUCCESS':
+            return {...state, groups: [...state.groups, payload.group], createGroupStatus: 'success'}
+        case 'CREATE_GROUP_FAILED':
+            return {...state, createGroupStatus: 'failed'}
+        
         default:
             return state
     }

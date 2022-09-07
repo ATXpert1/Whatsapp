@@ -14,24 +14,29 @@ function displayGroup(groupId) {
         dispatch({ type: "CHANGE_CHAT", payload: groupId })
     }
 }
-function connectToGroups(groups) {
-    return dispatch => {
-        let groupsIds = groups.map((group)=>{
-            return group._id
-        })
-        // connect socket to chat group
-        socket.emit("joinChats", groupsIds)
-        // update which chat opened in state
-        // dispatch({ type: "CHANGE_CHAT", payload: groupId })
-    }
-}
+
 function sendMessage(groupId, message) {
     return dispatch => {
-        let messageObj = { content: message, groupId: groupId}
+        let messageObj = { content: message, groupId: groupId }
         socket.emit("sendMessage", messageObj, (resp) => {
             // messageObj.from = JSON.parse(localStorage.getItem('user')).username
             dispatch({ type: "SEND_MESSAGE", payload: { groupId: groupId, message: resp } })
         })
+    }
+}
+function createGroup(groupName) {
+    return dispatch => {
+        customAxios.post('/groups/createGroup', { groupName: groupName })
+            .then(resp => dispatch({ type: 'CREATE_GROUP_SUCCESS', payload: { group: resp.data } }))
+            .catch(e => dispatch({type: 'CREATE_GROUP_FAILED', payload: {status: 'failed'}}))
+    }
+}
+function joinGroup(groupId) {
+    return dispatch => {
+        customAxios.post('/groups/joinGroup', {groupId: groupId})
+        .then(resp => console.log(resp.data))
+        // dispatch({ type: 'JOIN_GROUP_SUCCESS', payload: {group: resp.data}})
+        
     }
 }
 function getMessage(groupId, message) {
@@ -40,4 +45,4 @@ function getMessage(groupId, message) {
         dispatch({ type: "SEND_MESSAGE", payload: { groupId: groupId, message: message } })
     }
 }
-export default { getGroups, displayGroup, connectToGroups, sendMessage, getMessage }
+export default { getGroups, displayGroup, sendMessage, getMessage, createGroup, joinGroup }

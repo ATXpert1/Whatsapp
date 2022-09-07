@@ -35,6 +35,8 @@
     padding: 30px;
     overflow: scroll;
 }
+.chat__body::-webkit-scrollbar {display:none;}
+
 .chat__footer{
     display: flex;
     justify-content: space-between;

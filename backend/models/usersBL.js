@@ -1,13 +1,20 @@
 const userModel = require('./userModel')
 const groupModel = require('./groupModel')
 const signupUser = (username, password) => {
+    let defaultGroups = ['6318c7ca821cf36aed9ac91a', '6318c804821cf36aed9ac92f', '6318c830821cf36aed9ac937']
     return new Promise((resolve, reject) => {
         let user = new userModel({ username: username, password: password })
-        user.save((err) => {
+        user.save((err, user) => {
             if (err) {
+                console.log(err)
                 reject(err)
             } else {
-                resolve('success')
+                defaultGroups.forEach(groupId => {
+                    console.log(groupId)
+                    addGroupToUser(groupId, user._id)
+                        .catch(err => reject(err))
+                })
+                resolve('User added')
             }
         })
     })
@@ -35,19 +42,22 @@ const loginUser = (username, password) => {
 const deleteUser = (userId) => {
 
 }
-const addGroupToUser = (userId, groupId) => {
+const addGroupToUser = (groupId, userId ) => {
     return new Promise((resolve, reject) => {
         userModel.findById(userId, (err, user) => {
             if (err) {
+                console.log('first error, usersBL')
                 reject(err)
             } else {
-                let resp = user.groups.find((id) => id.toString() == groupId)
+                let resp = user.groups.find((group) => group._id.toString() == groupId)
                 if (resp) {
-                    reject('duplicate')
+                    console.log('duplicate group, usersBL')
+                    reject('duplicate group')
                 } else {
                     user.groups.push(groupId)
                     user.save((err) => {
                         if (err) {
+                            console.log('after save, usersBL')
                             reject(err)
                         } else {
                             resolve('added group')
@@ -61,28 +71,20 @@ const addGroupToUser = (userId, groupId) => {
 }
 const getGroupsOfUser = (userId) => {
     return new Promise((resolve, reject) => {
-        //     userModel.findById(userId, (err, user) => {
-        //         if (err) {
-        //             reject(err)
-        //         } else {
-        //             groupModel.find({ _id: { $in: user.groups } }, (err, groups) => {
-        //                 if (err) {
-        //                     reject(err)
-        //                 } else {
-        //                     resolve(groups)
-        //                 }
-        //             })
-        //         }
-        //     })
-        // })
-        //populate user with group objects
-        userModel.findOne({ id: userId })
-            .populate("groups")
-            .then(p => {
-                resolve(p.groups)
+            userModel.findById(userId, (err, user) => {
+                if (err) {
+                    reject(err)
+                } else {
+                    groupModel.find({ _id: { $in: user.groups } }).lean().exec((err, groups) => {
+                        if (err) {
+                            reject(err)
+                        } else {
+                            resolve(groups)
+                        }
+                    })
+                }
             })
-            .catch(error => console.log(error));
-    })
+        })
 }
 const removeGroup = (userId, groupId) => {
 

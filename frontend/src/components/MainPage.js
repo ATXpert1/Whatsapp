@@ -10,8 +10,8 @@ const io = require("socket.io-client");
 const MainMenu = (props) => {
     const dispatch = useDispatch()
     useEffect(() => {
-        if (!socket.hasListeners('messageFromUser')) {
-            socket.on("messageFromUser", (resp) => {
+        if (!socket?.hasListeners('messageFromUser')) {
+            socket?.on("messageFromUser", (resp) => {
                 dispatch(appActions.getMessage(resp.groupId, resp))
             })
         }

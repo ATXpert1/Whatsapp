@@ -3,8 +3,8 @@ import './SidebarChat.css';
 function sidebarChat(props) {
     return <div className="sidebarChat">
         <div className="sidebarChat__info">
-            <h4>{props.groupName} </h4>
-            <p>Last message...</p>
+            <h3>{props.groupName} </h3>
+            {props.lastMessage ? <p>{props.lastMessage.username}: {props.lastMessage.content}</p> : null}
         </div>
     </div>
 }
