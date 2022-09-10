@@ -9,6 +9,13 @@ function getGroups() {
             }).catch(err => console.log(err, 'this is the error'))
     }
 }
+function leaveGroup(groupId, userToRemoveId){
+    return dispatch => {
+        customAxios.post('/groups/leaveUserFromGroup', {groupId, userToRemoveId })
+        .then(resp=>dispatch({type:'REMOVE_GROUP', payload: groupId}))
+        .catch(err=>console.log(err, 'leavegroup'))
+    }
+}
 function displayGroup(groupId) {
     return dispatch => {
         dispatch({ type: "CHANGE_CHAT", payload: groupId })
@@ -28,15 +35,15 @@ function createGroup(groupName) {
     return dispatch => {
         customAxios.post('/groups/createGroup', { groupName: groupName })
             .then(resp => dispatch({ type: 'CREATE_GROUP_SUCCESS', payload: { group: resp.data } }))
-            .catch(e => dispatch({type: 'CREATE_GROUP_FAILED', payload: {status: 'failed'}}))
+            .catch(err => dispatch({ type: 'CREATE_GROUP_FAILED'}))
     }
 }
 function joinGroup(groupId) {
     return dispatch => {
-        customAxios.post('/groups/joinGroup', {groupId: groupId})
-        .then(resp => console.log(resp.data))
-        // dispatch({ type: 'JOIN_GROUP_SUCCESS', payload: {group: resp.data}})
-        
+        customAxios.post('/groups/joinGroup', { groupId: groupId })
+            .then(resp => dispatch({ type: 'JOIN_GROUP_SUCCESS', payload: { group: resp.data } }))
+            .catch(err=> dispatch({type: 'JOIN_GROUP_FAILED'}))
+
     }
 }
 function getMessage(groupId, message) {
@@ -45,4 +52,4 @@ function getMessage(groupId, message) {
         dispatch({ type: "SEND_MESSAGE", payload: { groupId: groupId, message: message } })
     }
 }
-export default { getGroups, displayGroup, sendMessage, getMessage, createGroup, joinGroup }
+export default { getGroups, displayGroup, sendMessage, getMessage, createGroup, joinGroup, leaveGroup }

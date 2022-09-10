@@ -4,7 +4,7 @@ class AuthService {
     signup = (username, password) => {
         return customAxios.post('/auth/signup', { username, password })
         .then(resp=>resp.data)
-        .catch(err=>err)
+        .catch(err=> {throw new Error(err)})
     };
     login = (username, password) => {
         return customAxios.post('/auth/login', { username: username, password: password }).then(resp => {

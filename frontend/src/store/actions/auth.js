@@ -11,7 +11,6 @@ const login = (username, password) => (dispatch) => {
 }
 const signup = (username, password) => (dispatch) => {
     return AuthService.signup(username, password).then(resp=>{
-        console.log(resp)
         dispatch(login(username, password))
     }).catch(err=>err)
 };

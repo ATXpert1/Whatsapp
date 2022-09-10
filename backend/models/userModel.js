@@ -15,22 +15,31 @@ let userSchema = new mongoose.Schema({
     groups: {
         type: [mongoose.SchemaTypes.ObjectId],
         ref: "groups",
-        unique: true
+        unique: true,
+        sparse: true,
+        optional: true,
+        index: true,
     },
     // groups: [{
     //     type: mongoose.SchemaTypes.ObjectId,
-    //     ref: "groups",
-    //     unique: true
+    //     unique: true,
+    //     sparse: true
     // }],
-    blockList: {
-        type: [mongoose.SchemaTypes.ObjectId],
-        ref: "groups",
-        unique: true
-    },
-    // blockList: [{
-    //     type: mongoose.SchemaTypes.ObjectId,
+    //     blockList: {
+    //     type: [mongoose.SchemaTypes.ObjectId],
     //     ref: "groups",
-    //     unique: true
-    // }]
+    //     unique: true,
+    //     sparse: true,
+    // },
+    blockList: [{
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: "groups",
+        unique: true,
+        optional: true,
+        sparse: true,
+        index: true,
+    }],
+
+
 })
 module.exports = mongoose.model('users', userSchema)

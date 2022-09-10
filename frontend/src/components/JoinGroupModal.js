@@ -25,7 +25,7 @@ const JoinGroupModal = (props) => {
 
         </DialogTitle>
         <DialogContent>
-            {submitStatus=='failed' ? <div>Either group doesn't exist, or it's a server error</div> : null}
+            {submitStatus=='failed' ? <div>Either group doesn't exist, duplicate, or a server error</div> : null}
             {submitStatus=='success' ? <div>Joined Group!</div> : null}
 
             <form onSubmit={(e) => joinGroup(e)}>

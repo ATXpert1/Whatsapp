@@ -31,27 +31,23 @@ const addUserToGroup = (groupId, userId) => {
     return new Promise((resolve, reject) => {
         groupModel.findById(groupId, (err, group) => {
             if (err) {
-                console.log('first error, groupsBL')
                 reject(err)
             } else {
                 let resp = group?.participants.find((user) => user._id.toString() == userId)
                 if (resp) {
-                    console.log('duplicate, groupsBL')
                     reject('duplicate group')
                 } else {
                     group.participants.push(userId)
                     group.save((err) => {
                         if (err) {
-                            console.log('after save, groupsBL')
                             reject(err)
                         } else {
                             usersBL.addGroupToUser(groupId, userId)
                                 .then(userResp => resolve(group))
                                 .catch(err => {
-                                    console.log('last minute, groupsBL')
                                     reject(err)
                                 })
-                        } 
+                        }
                     })
                 }
             }
@@ -71,5 +67,41 @@ const addMessageToGroup = (groupId, message) => {
             .catch(err => reject(err))
     })
 }
+const removeUserFromGroup = (groupId, userId, userToRemoveId) => {
+    return new Promise((resolve, reject) => {
+        groupModel.findById(groupId, (err, group) => {
+            if (err) {
+                reject(err)
+            } else {
+                if (userId == userToRemoveId || userId == group.admins[0]) {
+                    let userIndex = group.participants.findIndex(user => user._id == userToRemoveId)
+                    if (userIndex != -1) {
+                        group.participants.splice(userIndex, 1)
+                        if (userId == group.admins[0] && userId == userToRemoveId) {
+                            if (group.participants.length) {
+                                group.admins[0] = group.participants[0]
+                            } else {
+                                group.admins[0] = undefined
+                            }
+                        }
+                        group.save((err) => {
+                            if (err) {
+                                reject(err)
+                            } else {
+                                usersBL.removeGroupFromUser(groupId, userToRemoveId)
+                                    .then(resp => resolve(resp))
+                                    .catch(err => {
+                                        reject(err)
+                                    })
+                            }
+                        })
+                    }
+                    reject('desired user not found')
+                }
+                reject('group not found')
+            }
+        })
+    })
+}
 
-module.exports = { createGroup, addMessageToGroup, addUserToGroup }
+module.exports = { createGroup, addMessageToGroup, addUserToGroup, removeUserFromGroup }
