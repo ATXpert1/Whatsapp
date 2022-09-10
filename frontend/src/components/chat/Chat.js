@@ -14,7 +14,7 @@ function Chat(props) {
     const [anchorEl, setAnchorEl] = useState(null);
 
     const MyOptions = [
-        "Delete group",
+        "Leave group",
         "Update group"
     ];
     const messagesEndRef = useRef(null)
@@ -44,7 +44,7 @@ function Chat(props) {
         if (e.target.innerText === 'Update group') {
             dispatch(appActions)
         }
-        if (e.target.innerText === 'Delete group') {
+        if (e.target.innerText === 'Leave group') {
             dispatch(appActions.leaveGroup(groupIdAndName.id, currentUser.id))
         }
         setAnchorEl(null);
@@ -59,6 +59,7 @@ function Chat(props) {
             return ref.innerText.toLowerCase().includes(searchInput.toLowerCase())
         })
         setMatchedCount(matchRefs.length)
+        // Scroll into the first matching message content
         matchRefs[0]?.scrollIntoView({})
     }
     useEffect(() => {

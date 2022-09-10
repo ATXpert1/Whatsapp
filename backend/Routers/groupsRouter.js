@@ -24,7 +24,9 @@ router.post('/leaveUserFromGroup', (req, res) => {
     let userToRemoveId = req.body.userToRemoveId
     let userId = res.userId
     groupsBL.removeUserFromGroup(groupId, userId, userToRemoveId)
-    .then(resp=>res.json('removed user from group'))
-    .catch(err => res.status(404).send(err))
+        .then(resp => res.json('removed user from group'))
+        .catch(err => {
+            res.status(404).send(err)
+        })
 })
 module.exports = router

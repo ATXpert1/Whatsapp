@@ -12,12 +12,12 @@ function appReducer(state = initialState, action) {
         case 'CHANGE_CHAT':
             return { ...state, groupToDisplay: payload }
         case 'SEND_MESSAGE':
-            let groupIndex = state.groups.findIndex((group) => group._id === payload.groupId)
-            let newGroups = state.groups;
-            newGroups.unshift(newGroups[groupIndex]);
-            newGroups.splice(groupIndex + 1, 1);
-            newGroups[0].messages = [...newGroups[0].messages, payload.message]
-            return { ...state, groups: newGroups }
+            let groupIndex1 = state.groups.findIndex((group) => group._id === payload.groupId)
+            let newGroups1 = state.groups;
+            newGroups1.unshift(newGroups1[groupIndex1]);
+            newGroups1.splice(groupIndex1 + 1, 1);
+            newGroups1[0].messages = [...newGroups1[0].messages, payload.message]
+            return { ...state, groups: newGroups1 }
         case 'CREATE_GROUP_SUCCESS':
             return { ...state, groups: [...state.groups, payload.group], createGroupStatus: 'success' }
         case 'CREATE_GROUP_FAILED':
@@ -27,15 +27,10 @@ function appReducer(state = initialState, action) {
         case 'JOIN_GROUP_FAILED':
             return { ...state, joinGroupStatus: 'failed' }
         case 'REMOVE_GROUP':
-            // groupIndex = state.groups.findIndex((group) => group._id === payload.groupId)
-            // let newGroup = [...state.groups[groupIndex]]
-            // newGroup.splice(groupIndex, 1)
-            return {
-                ...state, groups: [
-                    ...state.groups.slice(0, payload.groupId),
-                    ...state.groups.slice(payload.groupId + 1)
-                ]
-            }
+            let groupIndex2 = state.groups.findIndex((group) => group._id === payload.groupId)
+            let newGroups2 = [...state.groups]
+            newGroups2.splice(groupIndex2+1, 1)
+            return {...state, groups: newGroups2}
         default:
             return state
     }

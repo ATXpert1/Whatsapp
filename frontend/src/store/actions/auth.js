@@ -1,4 +1,3 @@
-import customAxios from '../../configs/axios'
 import AuthService from '../../services/authService'
 
 const login = (username, password) => (dispatch) => {

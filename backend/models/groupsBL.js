@@ -90,15 +90,15 @@ const removeUserFromGroup = (groupId, userId, userToRemoveId) => {
                             } else {
                                 usersBL.removeGroupFromUser(groupId, userToRemoveId)
                                     .then(resp => resolve(resp))
-                                    .catch(err => {
-                                        reject(err)
-                                    })
+                                    .catch(err => reject(err))
                             }
                         })
+                    } else {
+                        reject('Desired user not found')
                     }
-                    reject('desired user not found')
+                } else {
+                    reject('Not authorized')
                 }
-                reject('group not found')
             }
         })
     })

@@ -25,6 +25,7 @@ let groupSchema = new mongoose.Schema({
     //     unique: true,
     //     required: true
     // }],
+    
     participants: {
         type: [mongoose.SchemaTypes.ObjectId],
         unique: true,
