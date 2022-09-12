@@ -51,6 +51,7 @@ module.exports = io.use(function (socket, next) {
             socket.join(groups)
             // emit welcome message to spe
             socket.on('sendMessage', (message, callback) => {
+                console.log(message)
                 message.username = socket.decoded.username
                 message.userId = socket.decoded.id
                 groupsBL.addMessageToGroup(message.groupId, message).then(resp => {
