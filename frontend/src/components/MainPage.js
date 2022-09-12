@@ -12,7 +12,6 @@ const MainMenu = (props) => {
     useEffect(() => {
         if (!socket?.hasListeners('messageFromUser')) {
             socket?.on("messageFromUser", (resp) => {
-                console.log(resp)
                 dispatch(appActions.getMessage(resp.groupId, resp))
             })
         }

@@ -79,7 +79,6 @@ const removeUserFromGroup = (groupId, userId, userToRemoveId) => {
     return new Promise((resolve, reject) => {
         groupModel.findById(groupId, (err, group) => {
             if (err) {
-                console.log(err)
                 reject(err)
             } else {
                 if (userId == userToRemoveId || userId == group.admins[0]) {
@@ -96,19 +95,16 @@ const removeUserFromGroup = (groupId, userId, userToRemoveId) => {
                         }
                         group.save((err) => {
                             if (err) {
-                                console.log(err, 'group.save()')
                                 reject(err)
                             } else {
                                 usersBL.removeGroupFromUser(groupId, userToRemoveId)
                                     .then(resp => resolve(resp))
                                     .catch(err => {
-                                        console.log(err, 'catch userBL')
                                         reject(err)
                                     })
                             }
                         })
                     } else {
-                        console.log('user not found')
                         reject('Desired user not found')
                     }
                 } else {

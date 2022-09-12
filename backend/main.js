@@ -3,17 +3,17 @@ const app = express();
 const server = require('http').createServer(app)
 const io = require('socket.io')(server, { cors: { origin: '*' } })
 const groupsBL = require('./models/groupsBL')
-
+const path = require('path')
 const cors = require('cors')
 const jwt = require("jsonwebtoken")
-
+const mountRoutes = require('express-mount-routes');
 const authRouter = require('./controllers/authController')
 const requireJWT = require('./middleware/authMiddleware')
 const groupsRouter = require('./Routers/groupsRouter')
 const usersRouter = require('./Routers/usersRouter')
 
 const dotenv = require('dotenv');
-dotenv.config();
+dotenv.config({path: path.resolve(__dirname, '../.env')});
 
 var corsOptions = {
     origin: '*',
@@ -29,6 +29,17 @@ server.listen(8000);
 app.use('/api/auth', authRouter)
 app.use('/api/groups', requireJWT, groupsRouter)
 app.use('/api/users', requireJWT, usersRouter)
+// ------------- deployment --------
+__dirname = path.resolve();
+if(process.env.NODE_ENV ==='production'){
+    app.use(express.static(path.join(__dirname+"/../", 'frontend/build')))
+    mountRoutes(app);
+    app.get('*', (req, res)=>{
+        res.sendFile(path.resolve(__dirname+"/../", 'frontend', 'build', 'index.html'))
+    })
+}
+// ------------- deployment --------
+
 
 module.exports = io.use(function (socket, next) {
     if (socket.handshake.query && socket.handshake.query.token) {
@@ -51,7 +62,6 @@ module.exports = io.use(function (socket, next) {
             socket.join(groups)
             // emit welcome message to spe
             socket.on('sendMessage', (message, callback) => {
-                console.log(message)
                 message.username = socket.decoded.username
                 message.userId = socket.decoded.id
                 groupsBL.addMessageToGroup(message.groupId, message).then(resp => {

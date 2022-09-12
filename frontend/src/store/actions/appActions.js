@@ -36,7 +36,6 @@ function joinGroup(groupId, userToAddId) {
                 if (getStoredUser() === userToAddId) {
                     dispatch({ type: 'JOIN_GROUP_SUCCESS', payload: { group: resp.data.group } })
                 } else {
-                    console.log(resp.data.username, 'right cell')
                     dispatch({ type: 'JOIN_USER_TO_GROUP', payload: { groupId: groupId, userToAddId: userToAddId, username: resp.data.username } })
                 }
             })
