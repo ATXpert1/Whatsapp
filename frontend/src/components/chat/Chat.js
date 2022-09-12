@@ -10,6 +10,7 @@ import appActions from '../../store/actions/appActions'
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import GroupInfoPopup from "./popup/GroupInfoPopup";
+import Welcome from "../Welcome";
 function Chat(props) {
     const [anchorEl, setAnchorEl] = useState(null);
     const [matchedCount, setMatchedCount] = useState(0)
@@ -55,7 +56,7 @@ function Chat(props) {
     };
     // Automatically scroll into buttom of chat
     const scrollToBottom = () => {
-        messagesEndRef.current.scrollIntoView({})
+        messagesEndRef?.current?.scrollIntoView({})
     }
     useEffect(scrollToBottom, [messages]);
     // Search for chat message using refs
@@ -71,7 +72,7 @@ function Chat(props) {
     useEffect(() => {
         refsCollection.current = refsCollection.current.slice(0, messages?.length);
     }, [messages]);
-    return <div className="chat">
+    return (messages ? (<div className="chat" >
         <div className="chat__header">
             <div className="chat__headerInfo">
                 <h3>{groupIdAndName.name}</h3>
@@ -97,8 +98,6 @@ function Chat(props) {
                         ))}
                     </Menu>
                 </form>
-                {/* Component that updates and removes users from group */}
-                <GroupInfoPopup trigger={groupInfoPopup} setTrigger={setGroupInfoPopup} group={group} currentUser={currentUser} />
             </div>
         </div>
         {/* Render all messages */}
@@ -107,6 +106,10 @@ function Chat(props) {
                 return <ChatMessage setRef={(instance) => refsCollection.current[index] = instance} key={index} message={message} currentUserId={currentUser.id} />
             })}
             <div ref={messagesEndRef} />
+            <div>
+                {/* Component that updates and removes users from group */}
+                <GroupInfoPopup trigger={groupInfoPopup} setTrigger={setGroupInfoPopup} group={group} currentUser={currentUser} />
+            </div>
         </div>
         {/* Chat box to send message */}
         <div className="chat__footer">
@@ -115,6 +118,6 @@ function Chat(props) {
                 <button type="submit">Send a message</button>
             </form>
         </div>
-    </div>
+    </div>) : <div className="chat"  >{<Welcome/>}</div>)
 }
 export default Chat;

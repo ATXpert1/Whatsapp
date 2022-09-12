@@ -47,7 +47,6 @@ module.exports = io.use(function (socket, next) {
 })
     .on('connection', (socket) => {
         socket.on('joinChats', (groups) => {
-            // check if user actually has the wanted group
             // join socket to group
             socket.join(groups)
             // emit welcome message to spe
@@ -56,14 +55,12 @@ module.exports = io.use(function (socket, next) {
                 message.userId = socket.decoded.id
                 groupsBL.addMessageToGroup(message.groupId, message).then(resp => {
                     callback(resp)
-                    // resp = { username: socket.decoded.username, content: resp.content, timeStamp: resp.timeStamp, groupId: message.groupId }
                     resp.groupId = message.groupId
-                    resp = {groupId: message.groupId, username: resp.username, userId: resp.userId, timeStamp: resp.timeStamp, content: resp.content}
+                    resp = { groupId: message.groupId, username: resp.username, userId: resp.userId, timeStamp: resp.timeStamp, content: resp.content }
                     socket.broadcast.to(message.groupId).emit('messageFromUser', resp);
                 })
             })
         });
         socket.on('disconnect', () => {
         })
-        // socket.emit('message', 'connected!');
     });

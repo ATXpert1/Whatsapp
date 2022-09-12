@@ -1,8 +1,8 @@
-import { Button } from "@material-ui/core"
-import { useDispatch, useSelector, shallowEqual } from "react-redux"
+import { Button, TextField } from "@material-ui/core"
+import { useDispatch, useSelector } from "react-redux"
 import './popup.css'
 import appActions from '../../../store/actions/appActions'
-import { useEffect, useState, useSyncExternalStore } from "react"
+import { useState } from "react"
 
 function GroupInfoPopup(props) {
     const participants = useSelector(state => state.appReducer.groups.find(group => group._id === props.group?._id)?.participants)
@@ -16,13 +16,14 @@ function GroupInfoPopup(props) {
         dispatch(appActions.joinGroup(props.group._id, userToAdd))
         setToggleAddOrRemove(false)
     }
+
     return (props.trigger) ? (
         <div className="popup">
             <Button onClick={() => props.setTrigger(false)}>Close</Button>
             <Button onClick={() => setToggleAddOrRemove(true)}>Add user</Button>
             {(toggleAddOrRemove) ? <div>
                 <div>Enter User's ID to add</div>
-                <input type="text" onChange={(e) => setUserToAdd(e.target.value)}></input>
+                <TextField type="text" onChange={(e) => setUserToAdd(e.target.value)}></TextField>
                 <Button onClick={addUser}>Submit</Button> <br />
                 <Button onClick={() => setToggleAddOrRemove(false)}>Cancel</Button>
             </div> :

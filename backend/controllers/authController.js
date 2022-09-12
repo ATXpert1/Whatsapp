@@ -18,16 +18,16 @@ router.post('/login', async (req, res) => {
 })
 router.post('/signup', (req, res) => {
     const { username, password } = req.body
-    let defaultGroups = ['', '', '']
+    let defaultGroups = ['631f032aa6f59f667b1e92d6', '631f035ca6f59f667b1e92dd', '631f03aea6f59f667b1e92ec']
 
     usersBL.signupUser(username, password)
         .then(userResp => {
-            // defaultGroups.forEach(groupId => {
-            //     groupsBL.addUserToGroup(groupId, userResp._id)
-            //         .catch(err => {
-            //             res.status(501).send(err)
-            //         })
-            // })
+            defaultGroups.forEach(groupId => {
+                groupsBL.addUserToGroup(groupId, userResp._id)
+                    .catch(err => {
+                        res.status(501).send(err)
+                    })
+            })
             res.json('created user and added default groups')
         }).catch(err => res.status(501).send(err))
 })
