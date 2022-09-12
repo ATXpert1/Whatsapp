@@ -27,10 +27,23 @@ function appReducer(state = initialState, action) {
         case 'JOIN_GROUP_FAILED':
             return { ...state, joinGroupStatus: 'failed' }
         case 'REMOVE_GROUP':
-            let groupIndex2 = state.groups.findIndex((group) => group._id === payload.groupId)
+            let groupIndex2 = state.groups.findIndex((group) => group._id === payload)
             let newGroups2 = [...state.groups]
-            newGroups2.splice(groupIndex2+1, 1)
-            return {...state, groups: newGroups2}
+            newGroups2.splice(groupIndex2, 1)
+            return { ...state, groups: newGroups2 }
+        case 'REMOVE_USER_FROM_GROUP':
+            let groupIndex3 = state.groups.findIndex((group) => group._id === payload.groupId)
+            let newGroups3 = [...state.groups]
+            let userToRemoveIndex = newGroups3[groupIndex3].participants.findIndex((user) => user.userId === payload.userToRemoveId)
+            newGroups3[groupIndex3].participants.splice(userToRemoveIndex, 1)
+            newGroups3[groupIndex3].participants = [...newGroups3[groupIndex3].participants]
+            return { ...state, groups: newGroups3 }
+        case 'JOIN_USER_TO_GROUP':
+            let groupIndex4 = state.groups.findIndex((group) => group._id === payload.groupId)
+            let newGroups4 = [...state.groups]
+            newGroups4[groupIndex4].participants.push({ userId: payload.userToAddId, username: payload.username })
+            newGroups4[groupIndex4].participants = [...newGroups4[groupIndex4].participants]
+            return { ...state, groups: newGroups4 }
         default:
             return state
     }

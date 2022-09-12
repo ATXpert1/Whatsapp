@@ -4,18 +4,19 @@ let userSchema = new mongoose.Schema({
     username: {
         type: String,
         unique: true,
+        minLength: 5,
         maxLength: 20,
         required: true
     },
     password: {
         type: String,
+        minLength: 5,
         maxLength: 25,
         required: true
     },
     groups: {
         type: [mongoose.SchemaTypes.ObjectId],
         ref: "groups",
-        unique: true,
         sparse: true,
         optional: true,
         index: true,
@@ -25,20 +26,21 @@ let userSchema = new mongoose.Schema({
     //     unique: true,
     //     sparse: true
     // }],
-    //     blockList: {
+    // blockList: {
     //     type: [mongoose.SchemaTypes.ObjectId],
     //     ref: "groups",
-    //     unique: true,
+    //     optional: true,
     //     sparse: true,
+    //     index: true,
     // },
-    blockList: [{
-        type: mongoose.SchemaTypes.ObjectId,
-        ref: "groups",
-        unique: true,
-        optional: true,
-        sparse: true,
-        index: true,
-    }],
+    // blockList: [{
+    //     type: mongoose.SchemaTypes.ObjectId,
+    //     ref: "groups",
+    //     unique: true,
+    //     optional: true,
+    //     sparse: true,
+    //     index: true,
+    // }],
 
 
 })

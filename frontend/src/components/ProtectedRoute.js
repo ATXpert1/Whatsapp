@@ -12,6 +12,7 @@ const ProtectedRoute = () => {
 
     const dispatch = useDispatch()
 
+    // Load groups into state
     useEffect(() => {
         if (loggedIn) {
             dispatch(appActions.getGroups())
@@ -22,18 +23,20 @@ const ProtectedRoute = () => {
     if (localStorage.getItem('user')) {
         token = JSON.parse(localStorage.getItem("user")).token
     }
+    // If jwt expired, log out
     if (token) {
         const isMyTokenExpired = isExpired(token);
         if (isMyTokenExpired) {
             dispatch(authActions.logout())
         }
     }
+    // If logged in and groups exist, connect to all chat rooms
     if (loggedIn) {
         if (groups.length) {
             connectSocket(groups.map(group => group._id))
             return <Outlet />
-        }else{
-            return <Outlet/>
+        } else {
+            return <Outlet />
         }
     }
     else {

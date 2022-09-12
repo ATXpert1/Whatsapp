@@ -9,9 +9,9 @@ const login = (username, password) => (dispatch) => {
         })
 }
 const signup = (username, password) => (dispatch) => {
-    return AuthService.signup(username, password).then(resp=>{
+    return AuthService.signup(username, password).then(resp => {
         dispatch(login(username, password))
-    }).catch(err=>err)
+    }).catch(err => err)
 };
 const logout = () => (dispatch) => {
     AuthService.logout();

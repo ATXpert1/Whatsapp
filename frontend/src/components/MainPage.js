@@ -1,14 +1,14 @@
 import { socket } from "../configs/socket";
 
-import { useEffect, useState } from "react"
-import { useSelector, useDispatch } from 'react-redux'
+import { useEffect } from "react"
+import { useDispatch } from 'react-redux'
 import Sidebar from "./sidebar/Sidebar"
 import appActions from '../store/actions/appActions'
 import Chat from './chat/Chat'
-const io = require("socket.io-client");
 
 const MainMenu = (props) => {
     const dispatch = useDispatch()
+    // Listen for new messages, don't if already listening
     useEffect(() => {
         if (!socket?.hasListeners('messageFromUser')) {
             socket?.on("messageFromUser", (resp) => {

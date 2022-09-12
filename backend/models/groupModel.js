@@ -5,41 +5,45 @@ let groupSchema = new mongoose.Schema({
     name: {
         type: String,
         unique: true,
-        required: true
+        required: true,
+        minLength: 5,
+        maxLength: 20,
     },
     // admins: [{
     //     type: mongoose.SchemaTypes.ObjectId,
     //     ref: "users",
     //     unique: true,
-    //     required: true
+    //     optional: true,
+    //     sparse: true,
+    //     index: true,
     // }],
     admins: {
         type: [mongoose.SchemaTypes.ObjectId],
-        unique: true,
-        ref: 'users',
-        required: true
+        ref: "users",
+        sparse: true,
+        optional: true,
+        index: true,
     },
-    // participants: [{
-    //     type: mongoose.SchemaTypes.ObjectId,
-    //     ref: "users",
-    //     unique: true,
-    //     required: true
-    // }],
+    participants: [{
+        userId: {
+            type: mongoose.SchemaTypes.ObjectId,
+            ref: "users",
+            required: true,
+            sparse: true,
+            optional: true,
+            index: true,
+        },
+        username: {
+            type: String,
+            required: true
+        }
+    }],
     // participants: {
-    //     type: [{
-    //         userId: mongoose.SchemaTypes.ObjectId,
-    //         userName: String
-    //     }],
+    //     type: [mongoose.SchemaTypes.ObjectId],
     //     unique: true,
     //     ref: 'users',
     //     required: true
     // },
-    participants: {
-        type: [mongoose.SchemaTypes.ObjectId],
-        unique: true,
-        ref: 'users',
-        required: true
-    },
     messages: [{
         userId: {
             type: mongoose.SchemaTypes.ObjectId,
@@ -52,7 +56,7 @@ let groupSchema = new mongoose.Schema({
         },
         timeStamp: {
             type: Date,
-            default: new Date(),
+            default: Date.now,
             required: true
         },
         content: {

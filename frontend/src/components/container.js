@@ -10,7 +10,7 @@ const ContainerComp = (props) => {
                 <Route element={<MainPage />} path="/" exact />
             </Route>
             <Route path='/login' element={<LoginComp />} />
-            <Route path='/signup' element={<SignUp/>} />
+            <Route path='/signup' element={<SignUp />} />
         </Routes>
     </div>
 }

@@ -5,7 +5,7 @@
     height: 100vh;
 }
 
-.app__body{
+.app__body {
     display: flex;
     background-color: #ededed;
     margin-top: -50px;

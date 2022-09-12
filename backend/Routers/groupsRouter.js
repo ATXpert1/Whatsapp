@@ -4,15 +4,15 @@ const groupsBL = require('../models/groupsBL')
 router.post('/createGroup', (req, res) => {
     let groupName = req.body.groupName
     let clientId = res.userId
-    groupsBL.createGroup(groupName, clientId)
+    let username = res.username
+    groupsBL.createGroup(groupName, clientId, username)
         .then(resp => res.json(resp))
         .catch(err => res.status(501).send(err))
 })
 router.post('/joinGroup', (req, res) => {
     let groupId = req.body.groupId
-    let clientId = res.userId
-
-    groupsBL.addUserToGroup(groupId, clientId)
+    let userToAddId = req.body.userToAddId
+    groupsBL.addUserToGroup(groupId, userToAddId)
         .then(resp => res.json(resp))
         .catch(err => res.status(501).send(err))
 })

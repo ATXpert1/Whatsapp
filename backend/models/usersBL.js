@@ -6,6 +6,7 @@ const signupUser = (username, password) => {
         let user = new userModel({ username: username, password: password })
         user.save((err, user) => {
             if (err) {
+                console.log(err)
                 reject(err)
             } else{
                 resolve(user)
@@ -49,9 +50,10 @@ const addGroupToUser = (groupId, userId) => {
                     user.groups.push(groupId)
                     user.save((err) => {
                         if (err) {
+                            console.log(err)
                             reject(err)
                         } else {
-                            resolve('added group')
+                            resolve(user)
                         }
                     })
                 }

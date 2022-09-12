@@ -9,28 +9,32 @@ import SearchOutlined from '@material-ui/icons/SearchOutlined'
 import appActions from '../../store/actions/appActions'
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
-
+import GroupInfoPopup from "./popup/GroupInfoPopup";
 function Chat(props) {
     const [anchorEl, setAnchorEl] = useState(null);
-
-    const MyOptions = [
-        "Leave group",
-        "Update group"
-    ];
-    const messagesEndRef = useRef(null)
-    const refsCollection = useRef([])
     const [matchedCount, setMatchedCount] = useState(0)
     const [message, setMessage] = useState("")
     const [searchInput, setSearchInput] = useState("")
-    const dispatch = useDispatch()
+    const [groupInfoPopup, setGroupInfoPopup] = useState(false)
+    const messagesEndRef = useRef(null)
+    const refsCollection = useRef([])
+
+    const MyOptions = [
+        "Group info",
+        "Leave group",
+    ];
+
     const currentUser = useSelector((state) => state.authReducer.user)
     const groupToDisplay = useSelector((state) => state.appReducer.groupToDisplay)
     let groupIdAndName = null
+    let group = null
     const messages = useSelector((state) => {
-        let group = state.appReducer.groups.find((group) => group._id === groupToDisplay)
-        groupIdAndName = {id: group?._id, name: group?.name}
+        group = state.appReducer.groups.find((group) => group._id === groupToDisplay)
+        groupIdAndName = { id: group?._id, name: group?.name }
         return group?.messages
     })
+    const dispatch = useDispatch()
+
     const sendMessage = (e) => {
         e.preventDefault()
         dispatch(appActions.sendMessage(groupToDisplay, message))
@@ -41,18 +45,20 @@ function Chat(props) {
     const open = Boolean(anchorEl);
 
     const handleClose = (e) => {
-        if (e.target.innerText === 'Update group') {
-            dispatch(appActions)
+        if (e.target.innerText === 'Group info') {
+            setGroupInfoPopup(true)
         }
         if (e.target.innerText === 'Leave group') {
             dispatch(appActions.leaveGroup(groupIdAndName.id, currentUser.id))
         }
         setAnchorEl(null);
     };
+    // Automatically scroll into buttom of chat
     const scrollToBottom = () => {
         messagesEndRef.current.scrollIntoView({})
     }
     useEffect(scrollToBottom, [messages]);
+    // Search for chat message using refs
     const searchChatMessage = (e) => {
         e.preventDefault()
         let matchRefs = refsCollection.current.filter(ref => {
@@ -91,14 +97,18 @@ function Chat(props) {
                         ))}
                     </Menu>
                 </form>
+                {/* Component that updates and removes users from group */}
+                <GroupInfoPopup trigger={groupInfoPopup} setTrigger={setGroupInfoPopup} group={group} currentUser={currentUser} />
             </div>
         </div>
+        {/* Render all messages */}
         <div className="chat__body">
             {messages?.map((message, index) => {
                 return <ChatMessage setRef={(instance) => refsCollection.current[index] = instance} key={index} message={message} currentUserId={currentUser.id} />
             })}
             <div ref={messagesEndRef} />
         </div>
+        {/* Chat box to send message */}
         <div className="chat__footer">
             <form onSubmit={sendMessage}>
                 <input onChange={e => setMessage(e.target.value)} placeholder="Type a message" type="text"></input>

@@ -14,6 +14,7 @@ const requireJWT = (req, res, next) => {
         else {
             //pass current userId into next middleware
             res.userId = decoded.id
+            res.username = decoded.username
             next()
         }
     })) {
