@@ -10,6 +10,6 @@
     "react-tap-event-plugin": "^3.0.3"
   },
   "engines": {
-    "node": "18.x"
+    "node": "16.x"
   }
 }
