@@ -42,6 +42,7 @@ const addUserToGroup = (groupId, userToAddId) => {
                         if (err) {
                             reject(err)
                         } else {
+                            console.log(group)
                             group.participants.push({ userId: user._id, username: user.username })
                             group.save((err) => {
                                 if (err) {

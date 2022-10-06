@@ -1,13 +1,17 @@
 const io = require("socket.io-client");
 
-export let socket = null
+export var socket = null
 
 // export const socket = io.connect('http://localhost:8000', {
 //     query: { token }
 // });
 
+
+
+
 export const connectSocket = (groupsId) => {
     if (socket) return
+    console.log('connect socket')
     // Connect socket
     let token = null
     if (localStorage.getItem('user')) {
@@ -16,7 +20,10 @@ export const connectSocket = (groupsId) => {
     socket = io.connect('http://localhost:8000', {
         query: { token }
     });
+
     socket.emit("joinChats", groupsId)
+    window.socket = socket
+
 }
 export const disconnectSocket = () => {
     if (socket) {
@@ -24,3 +31,10 @@ export const disconnectSocket = () => {
         socket = null
     }
 }
+
+export const useSockets = (dispatcher) => {
+
+    return {
+        connectSocket,
+    }
+};

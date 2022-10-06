@@ -19,7 +19,7 @@ router.post('/login', async (req, res) => {
 })
 router.post('/signup', (req, res) => {
     const { username, password } = req.body
-    let defaultGroups = ['631f032aa6f59f667b1e92d6', '631f035ca6f59f667b1e92dd', '631f03aea6f59f667b1e92ec']
+    let defaultGroups = ['6339926e87e588f2af3cc68c', '6339927987e588f2af3cc691', '6339927f87e588f2af3cc696']
 
     usersBL.signupUser(username, password)
         .then(userResp => {

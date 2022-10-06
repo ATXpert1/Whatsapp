@@ -81,7 +81,7 @@ function Chat(props) {
                 <form onSubmit={(e) => searchChatMessage(e)} style={{ display: 'flex' }}>
                     {matchedCount > 0 ? <Typography>Matches found: {matchedCount}</Typography> : null}
                     <SearchOutlined />
-                    <TextField name='search' onChange={(e) => { setSearchInput(e.target.value) }} />
+                    <TextField name='search' label="Search message" onChange={(e) => { setSearchInput(e.target.value) }} />
                     <IconButton onClick={handleGroupOptions}>
                         <MoreVertIcon />
                     </IconButton>

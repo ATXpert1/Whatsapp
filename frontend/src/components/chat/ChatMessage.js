@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import './ChatMessage.css'
+
 function ChatMessage(props) {
     const [time, setTime] = useState()
     // Format date correctly

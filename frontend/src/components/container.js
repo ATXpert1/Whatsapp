@@ -1,6 +1,6 @@
 import { Routes, Route } from 'react-router-dom'
 import MainPage from './MainPage'
-import LoginComp from './Login'
+import LoginComp from './login'
 import SignUp from './SignUp'
 import ProtectedRoute from './ProtectedRoute'
 const ContainerComp = (props) => {

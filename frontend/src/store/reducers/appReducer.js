@@ -5,6 +5,7 @@ const initialState = {
     joinGroupStatus: null
 }
 function appReducer(state = initialState, action) {
+    console.log(action)
     const { type, payload } = action;
     switch (type) {
         case 'GET_GROUPS':

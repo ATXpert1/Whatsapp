@@ -11,5 +11,7 @@
     margin-top: -50px;
     height: 90vh;
     width: 200vh;
+    min-width: 1000px;
+    min-height: 600px;
     box-shadow: -1px 4px 20px rgba(0, 0, 0, 0);
 }
